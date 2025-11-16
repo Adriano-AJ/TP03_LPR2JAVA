@@ -1,0 +1,98 @@
+package calculadora;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Calculadora extends JFrame {
+
+    private JTextField txtN1, txtN2, txtResultado;
+    private JButton btnSomar, btnSubtrair, btnMultiplicar, btnDividir, btnClear;
+
+    public Calculadora() {
+
+        super("Calculadora - Exercício 01");
+
+        // Campos
+        txtN1 = new JTextField(10);
+        txtN2 = new JTextField(10);
+        txtResultado = new JTextField(15);
+        txtResultado.setEditable(false);
+
+        // Botões
+        btnSomar = new JButton("+");
+        btnSubtrair = new JButton("-");
+        btnMultiplicar = new JButton("*");
+        btnDividir = new JButton("/");
+        btnClear = new JButton("C");
+
+        // Painel
+        JPanel painel = new JPanel();
+        painel.add(new JLabel("Número 1:"));
+        painel.add(txtN1);
+        painel.add(new JLabel("Número 2:"));
+        painel.add(txtN2);
+
+        painel.add(btnSomar);
+        painel.add(btnSubtrair);
+        painel.add(btnMultiplicar);
+        painel.add(btnDividir);
+        painel.add(btnClear);
+
+        painel.add(new JLabel("Resultado:"));
+        painel.add(txtResultado);
+
+        add(painel);
+
+        // Eventos
+        btnSomar.addActionListener(e -> calcular("+"));
+        btnSubtrair.addActionListener(e -> calcular("-"));
+        btnMultiplicar.addActionListener(e -> calcular("*"));
+        btnDividir.addActionListener(e -> calcular("/"));
+        btnClear.addActionListener(e -> limpar());
+
+        setSize(300, 220);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    private void calcular(String op) {
+
+        double n1 = 0, n2 = 0, resultado = 0;
+
+        try {
+            n1 = Double.parseDouble(txtN1.getText());
+            n2 = Double.parseDouble(txtN2.getText());
+
+            switch(op) {
+                case "+": resultado = n1 + n2; break;
+                case "-": resultado = n1 - n2; break;
+                case "*": resultado = n1 * n2; break;
+                case "/":
+                    if (n2 == 0) throw new ArithmeticException("Divisão por zero!");
+                    resultado = n1 / n2;
+                    break;
+            }
+
+            txtResultado.setText(String.valueOf(resultado));
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Erro: Digite apenas números!", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (ArithmeticException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // sempre executa
+            System.out.println("Operação finalizada.");
+        }
+    }
+
+    private void limpar() {
+        txtN1.setText("");
+        txtN2.setText("");
+        txtResultado.setText("");
+    }
+
+    public static void main(String[] args) {
+        new Calculadora();
+    }
+}
